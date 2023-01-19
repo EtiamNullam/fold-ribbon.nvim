@@ -1,5 +1,7 @@
 local M =  {}
 
+M.version = '0.1.0'
+
 function M.setup()
   if vim.fn.has('nvim-0.9') == 0 then
     vim.notify(
