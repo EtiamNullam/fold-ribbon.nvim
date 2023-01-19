@@ -15,6 +15,7 @@ function M.setup()
   vim.o.statuscolumn = '%s'
     .. '%#FoldColumnDynamic#'
     .. "%{v:lua.require'fold-ribbon'.apply_highlight_to_dynamic_foldcolumn(v:lnum)}"
+    .. (vim.o.number and '%## %=%l ' or '')
 end
 
 local fg = {
