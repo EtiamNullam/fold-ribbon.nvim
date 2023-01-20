@@ -2,6 +2,24 @@ local M =  {}
 
 M.version = '0.1.0'
 
+local function subscribe_to_option_changes()
+  local group_id = vim.api.nvim_create_augroup(
+    'FoldRibbonOptionSync',
+    { clear = true }
+  )
+
+  vim.api.nvim_create_autocmd('OptionSet', {
+    pattern = 'number,relativenumber',
+    group = group_id,
+    callback = M.setup
+  })
+
+  vim.api.nvim_create_autocmd('BufEnter', {
+    group = group_id,
+    callback = M.setup
+  })
+end
+
 function M.setup()
   if vim.fn.has('nvim-0.9') == 0 then
     vim.notify(
@@ -13,6 +31,8 @@ function M.setup()
   end
 
   vim.o.foldcolumn = '0'
+
+  subscribe_to_option_changes()
 
   vim.o.statuscolumn = '%s'
     .. '%#FoldColumnDynamic#'
