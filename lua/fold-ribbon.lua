@@ -22,7 +22,11 @@ local function subscribe_to_option_changes()
   vim.api.nvim_create_autocmd('OptionSet', {
     pattern = 'number,relativenumber',
     group = group_id,
-    callback = M.setup
+    callback = function()
+      if not is_window_floating(0) then
+        update_statuscolumn()
+      end
+    end,
   })
 
   vim.api.nvim_create_autocmd('BufEnter', {
