@@ -63,7 +63,7 @@ local fg = {
   dark = '#000000',
 }
 
-local highlight_levels = {
+local highlight_steps = {
   {
     link = 'FoldLevel',
   },
@@ -132,9 +132,9 @@ local highlight_levels = {
 function M.apply_highlight_to_dynamic_foldcolumn(line_number)
   local current_line_level = vim.fn.foldlevel(line_number)
 
-  local highlight = highlight_levels[(
+  local highlight = highlight_steps[(
     current_line_level % (
-      #highlight_levels - 1
+      #highlight_steps - 1
     )
   ) + 1]
 
