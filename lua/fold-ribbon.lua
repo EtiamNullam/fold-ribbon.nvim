@@ -22,7 +22,7 @@ end
 
 local function register_autocommands()
   local group_id = vim.api.nvim_create_augroup(
-    'FoldRibbonOptionSync',
+    'FoldRibbon',
     { clear = true }
   )
 
