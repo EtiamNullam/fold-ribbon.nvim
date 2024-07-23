@@ -134,7 +134,7 @@ function M.apply_highlight_to_dynamic_foldcolumn(line_number)
 
   local highlight = highlight_steps[(
     current_line_level % (
-      #highlight_steps - 1
+      #highlight_steps
     )
   ) + 1]
 
