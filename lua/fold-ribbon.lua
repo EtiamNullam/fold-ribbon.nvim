@@ -20,7 +20,7 @@ local function update_statuscolumn()
     .. (vim.o.number and '%## %=%l ' or '')
 end
 
-local function subscribe_to_option_changes()
+local function register_autocommands()
   local group_id = vim.api.nvim_create_augroup(
     'FoldRibbonOptionSync',
     { clear = true }
@@ -137,7 +137,7 @@ function M.setup(options)
 
   vim.o.foldcolumn = '0'
 
-  subscribe_to_option_changes()
+  register_autocommands()
 
   -- TODO iterate over all windows
   if not is_window_floating(0) then
