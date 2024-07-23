@@ -1,6 +1,6 @@
 local M =  {}
 
-M.version = '0.1.0'
+M.version = '0.2.0'
 
 local function is_window_floating(window_id)
   return vim.api.nvim_win_get_config(window_id).relative ~= ""
