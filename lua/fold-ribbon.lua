@@ -6,6 +6,13 @@ local function is_window_floating(window_id)
   return vim.api.nvim_win_get_config(window_id).relative ~= ""
 end
 
+local function warn(message)
+  vim.notify(
+    '[fold-ribbon]: ' .. message,
+    vim.log.levels.WARN
+  )
+end
+
 local function update_statuscolumn()
   vim.o.statuscolumn = '%s'
     .. '%#FoldColumnDynamic#'
@@ -37,25 +44,6 @@ local function subscribe_to_option_changes()
       end
     end,
   })
-end
-
-function M.setup()
-  if vim.fn.has('nvim-0.9') == 0 then
-    vim.notify(
-      '[fold-ribbon]: Configuration of "statuscolumn" requires latest version of neovim nightly (>= 0.9)',
-      vim.log.levels.WARN
-    )
-
-    return
-  end
-
-  vim.o.foldcolumn = '0'
-
-  subscribe_to_option_changes()
-
-  if not is_window_floating(0) then
-    update_statuscolumn()
-  end
 end
 
 local fg = {
@@ -128,6 +116,34 @@ local highlight_steps = {
     bg = '#000000',
   },
 }
+
+function M.setup(options)
+  if vim.fn.has('nvim-0.9') == 0 then
+    warn('Configuration of "statuscolumn" requires latest version of neovim nightly (>= 0.9)')
+
+    return
+  end
+
+  if options then
+    if options.highlight_steps then
+      if type(options.highlight_steps) == 'table' then
+        highlight_steps = options.highlight_steps
+        vim.print(highlight_steps)
+      else
+        warn('"highlight_steps" must be a table')
+      end
+    end
+  end
+
+  vim.o.foldcolumn = '0'
+
+  subscribe_to_option_changes()
+
+  -- TODO iterate over all windows
+  if not is_window_floating(0) then
+    update_statuscolumn()
+  end
+end
 
 function M.apply_highlight_to_dynamic_foldcolumn(line_number)
   local current_line_level = vim.fn.foldlevel(line_number)
