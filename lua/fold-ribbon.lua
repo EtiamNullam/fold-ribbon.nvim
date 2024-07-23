@@ -6,6 +6,13 @@ local function is_window_floating(window_id)
   return vim.api.nvim_win_get_config(window_id).relative ~= ""
 end
 
+local function error(message)
+  vim.notify(
+    '[fold-ribbon]: ' .. message,
+    vim.log.levels.ERROR
+  )
+end
+
 local function warn(message)
   vim.notify(
     '[fold-ribbon]: ' .. message,
@@ -119,7 +126,7 @@ local highlight_steps = {
 
 function M.setup(options)
   if vim.fn.has('nvim-0.9') == 0 then
-    warn('Configuration of "statuscolumn" requires latest version of neovim nightly (>= 0.9)')
+    error('Configuration of "statuscolumn" requires latest version of neovim nightly (>= 0.9)')
 
     return
   end
