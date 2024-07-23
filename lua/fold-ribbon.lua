@@ -2,6 +2,17 @@ local M =  {}
 
 M.version = '0.1.0'
 
+local function is_window_floating(window_id)
+  return vim.api.nvim_win_get_config(window_id).relative ~= ""
+end
+
+local function update_statuscolumn()
+  vim.o.statuscolumn = '%s'
+    .. '%#FoldColumnDynamic#'
+    .. "%{v:lua.require('fold-ribbon').apply_highlight_to_dynamic_foldcolumn(v:lnum)}"
+    .. (vim.o.number and '%## %=%l ' or '')
+end
+
 local function subscribe_to_option_changes()
   local group_id = vim.api.nvim_create_augroup(
     'FoldRibbonOptionSync',
@@ -16,7 +27,11 @@ local function subscribe_to_option_changes()
 
   vim.api.nvim_create_autocmd('BufEnter', {
     group = group_id,
-    callback = M.setup
+    callback = function()
+      if not is_window_floating(0) then
+        update_statuscolumn()
+      end
+    end,
   })
 end
 
@@ -34,10 +49,9 @@ function M.setup()
 
   subscribe_to_option_changes()
 
-  vim.o.statuscolumn = '%s'
-    .. '%#FoldColumnDynamic#'
-    .. "%{v:lua.require'fold-ribbon'.apply_highlight_to_dynamic_foldcolumn(v:lnum)}"
-    .. (vim.o.number and '%## %=%l ' or '')
+  if not is_window_floating(0) then
+    update_statuscolumn()
+  end
 end
 
 local fg = {
