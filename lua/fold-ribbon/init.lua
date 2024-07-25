@@ -4,6 +4,9 @@ M.version = '0.4.0'
 
 M.is_active = false
 
+local excluded_filetypes_regexes = {}
+local excluded_paths_regexes = {}
+
 local fg = {
   bright = '#ffffff',
   dark = '#000000',
@@ -13,8 +16,8 @@ local fg = {
   ---@field highlight_steps vim.api.keyset.highlight[]
   ---@field align_line_number_right boolean
   ---@field disable boolean
-  ---@field excluded_filetypes string[]
-  ---@field excluded_paths string[]
+  ---@field excluded_filetype_patterns string[]
+  ---@field excluded_path_patterns string[]
 
 ---@type FoldRibbon.SetupOptions
 local default_options = {
@@ -82,11 +85,11 @@ local default_options = {
   },
   align_line_number_right = true,
   disable = false,
-  excluded_filetypes = {
+  excluded_filetype_patterns = {
     'startify',
     'help',
   },
-  excluded_paths = {},
+  excluded_path_patterns = {},
 }
 
 M.active_options = default_options
@@ -152,19 +155,14 @@ local function is_valid_window_for_ribbon(window_id, file_path)
     return false
   end
 
-  for _, excluded_filetype in pairs(M.active_options.excluded_filetypes) do
-    local is_excluded = excluded_filetype == vim.o.filetype
-
-
-    if is_excluded then
+  for _, regex in pairs(excluded_filetypes_regexes) do
+    if regex:match_str(vim.o.filetype) then
       return false
     end
   end
 
-  for _, excluded_path in pairs(M.active_options.excluded_paths) do
-    local is_excluded = file_path == excluded_path
-
-    if is_excluded then
+  for _, regex in pairs(excluded_paths_regexes) do
+    if regex:match_str(file_path) then
       return false
     end
   end
@@ -222,12 +220,29 @@ local function remove_autocommands()
   vim.api.nvim_clear_autocmds { group = autocommand_group }
 end
 
+---@param patterns string[]
+---@param match_precisely boolean
+---@return vim.regex[]
+local function compile_regexes(patterns, match_precisely)
+  local compiled_regexes = {}
+
+  for _, pattern in pairs(patterns) do
+    if match_precisely then
+      pattern = '^' .. pattern .. '$'
+    end
+
+    table.insert(compiled_regexes, vim.regex(pattern))
+  end
+
+  return compiled_regexes
+end
+
 ---@class FoldRibbon.SetupOptions.Overrides
   ---@field highlight_steps? vim.api.keyset.highlight[]
   ---@field align_line_number_right? boolean
   ---@field disable? boolean
-  ---@field excluded_filetypes? string[]
-  ---@field excluded_paths? string[]
+  ---@field excluded_filetype_patterns? string[]
+  ---@field excluded_path_patterns? string[]
 
 ---@param options FoldRibbon.SetupOptions.Overrides
 function M.setup(options)
@@ -265,7 +280,6 @@ function M.setup(options)
 
     if not was_disabled_before then
       for _, window_id in pairs(open_windows_ids) do
-
         local buffer_id = vim.api.nvim_win_get_buf(window_id)
         local file_path = vim.api.nvim_buf_get_name(buffer_id)
 
@@ -281,6 +295,9 @@ function M.setup(options)
   end
 
   register_autocommands()
+
+  excluded_filetypes_regexes = compile_regexes(options.excluded_filetype_patterns, true)
+  excluded_paths_regexes = compile_regexes(options.excluded_path_patterns, true)
 
   for _, window_id in pairs(open_windows_ids) do
     local buffer_id = vim.api.nvim_win_get_buf(window_id)
