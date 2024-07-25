@@ -33,10 +33,14 @@ end
 
 local saved_statuscolumn = ''
 
-local function update_statuscolumn()
-  vim.o.foldcolumn = '0'
+---@param window_id integer
+local function update_statuscolumn(window_id)
+  vim.api.nvim_set_option_value('foldcolumn', '0', { win = window_id })
 
-  local line_number_segment = create_line_number_statuscolumn(vim.o.number, vim.o.relativenumber)
+  local line_number_segment = create_line_number_statuscolumn(
+    vim.api.nvim_get_option_value('number', { win = window_id }),
+    vim.api.nvim_get_option_value('relativenumber', { win = window_id })
+  )
 
   local statuscolumn = M.get_ribbon() .. ' '
 
@@ -55,10 +59,20 @@ local function update_statuscolumn()
 
   statuscolumn = '%s' .. statuscolumn
 
-  vim.o.statuscolumn = statuscolumn
+  vim.api.nvim_set_option_value('statuscolumn', statuscolumn, { win = window_id })
 end
 
 local autocommand_group = 'FoldRibbon'
+
+---@param window_id integer
+---@return boolean
+local function is_valid_window_for_ribbon(window_id, file_path)
+  if is_window_floating(window_id) then
+    return false
+  end
+
+  return true
+end
 
 local function register_autocommands()
   local group_id = vim.api.nvim_create_augroup(
@@ -69,9 +83,13 @@ local function register_autocommands()
   vim.api.nvim_create_autocmd('OptionSet', {
     pattern = 'number,relativenumber',
     group = group_id,
-    callback = function()
-      if not is_window_floating(0) then
-        update_statuscolumn()
+    callback = function(event)
+      local window_id = 0
+      local buffer_id = event.buf
+      local file_path = vim.api.nvim_buf_get_name(buffer_id)
+
+      if is_valid_window_for_ribbon(window_id, file_path) then
+        update_statuscolumn(window_id)
       end
     end,
   })
@@ -81,9 +99,11 @@ local function register_autocommands()
     'BufWinEnter',
   }, {
     group = group_id,
-    callback = function()
-      if not is_window_floating(0) then
-        update_statuscolumn()
+    callback = function(event)
+      local window_id = 0
+
+      if is_valid_window_for_ribbon(window_id, event.file) then
+        update_statuscolumn(window_id)
       end
     end,
   })
@@ -174,6 +194,8 @@ function M.setup(options)
   options = vim.tbl_deep_extend('keep', options, default_options)
   M.active_options = options
 
+  local open_windows_ids = vim.api.nvim_list_wins()
+
   if options.disable then
     remove_autocommands()
     vim.o.statuscolumn = saved_statuscolumn
@@ -199,8 +221,13 @@ function M.setup(options)
 
   register_autocommands()
 
-  if not is_window_floating(0) then
-    update_statuscolumn()
+  for _, window_id in pairs(open_windows_ids) do
+    local buffer_id = vim.api.nvim_win_get_buf(window_id)
+    local file_path = vim.api.nvim_buf_get_name(buffer_id)
+
+    if is_valid_window_for_ribbon(window_id, file_path) then
+      update_statuscolumn(window_id)
+    end
   end
 end
 
