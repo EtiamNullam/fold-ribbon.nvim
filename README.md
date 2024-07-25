@@ -9,6 +9,19 @@ https://github.com/kevinhwang91/nvim-ufo/issues/24
 
 ## Installation
 
+`lazy.nvim`:
+
+```lua
+{
+    'EtiamNullam/fold-ribbon.nvim',
+    config = function()
+        require('fold-ribbon').setup()
+    end,
+},
+```
+
+`vim-plug`:
+
 ```vim
 Plug 'EtiamNullam/fold-ribbon'
 ```
