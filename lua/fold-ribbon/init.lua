@@ -4,6 +4,13 @@ M.version = '0.4.0'
 
 M.is_active = false
 
+local default_options = {
+  align_line_number_right = true,
+  disable = false,
+}
+
+M.active_options = default_options
+
 local function is_window_floating(window_id)
   return vim.api.nvim_win_get_config(window_id).relative ~= ''
 end
@@ -28,11 +35,27 @@ local saved_statuscolumn = ''
 
 local function update_statuscolumn()
   vim.o.foldcolumn = '0'
-  vim.o.statuscolumn = '%s'
-    .. create_line_number_statuscolumn(vim.o.number, vim.o.relativenumber)
-    .. ' %='
-    .. M.get_ribbon()
-    .. ' '
+
+  local line_number_segment = create_line_number_statuscolumn(vim.o.number, vim.o.relativenumber)
+
+  local statuscolumn = M.get_ribbon() .. ' '
+
+  if line_number_segment ~= '' then
+    if M.active_options.align_line_number_right then
+      statuscolumn = '%='
+        .. line_number_segment
+        .. ' '
+        .. statuscolumn
+    else
+      statuscolumn = line_number_segment
+        .. ' %='
+        .. statuscolumn
+    end
+  end
+
+  statuscolumn = '%s' .. statuscolumn
+
+  vim.o.statuscolumn = statuscolumn
 end
 
 local autocommand_group = 'FoldRibbon'
@@ -148,6 +171,8 @@ function M.setup(options)
   end
 
   options = options or {}
+  options = vim.tbl_deep_extend('keep', options, default_options)
+  M.active_options = options
 
   if options.disable then
     remove_autocommands()
