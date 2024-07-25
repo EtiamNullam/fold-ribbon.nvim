@@ -62,9 +62,6 @@ local fg = {
 
 local highlight_steps = {
   {
-    link = 'FoldLevel',
-  },
-  {
     fg = fg.dark,
     bg = '#eeeeee',
   },
