@@ -168,7 +168,9 @@ local function get_highlight(line_number, level)
   end
 
   local highlight = highlight_steps[
-    (level % #highlight_steps) + 1
+    (
+      (level - 1) % #highlight_steps
+    ) + 1
   ]
 
   return highlight
