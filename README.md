@@ -12,10 +12,10 @@ https://github.com/kevinhwang91/nvim-ufo/issues/24
 
 ```lua
 {
-    'EtiamNullam/fold-ribbon.nvim',
-    config = function()
-        require('fold-ribbon').setup()
-    end,
+  'EtiamNullam/fold-ribbon.nvim',
+  config = function()
+    require('fold-ribbon').setup()
+  end,
 },
 ```
 
@@ -51,11 +51,11 @@ You can define your own colors at each fold level. If there are more fold levels
 
 ```lua
 require('fold-ribbon').setup {
-    highlight_steps = {
-        { bg = '#ff8888' },
-        { bg = '#88ff88' },
-        { bg = '#8888ff' },
-    }
+  highlight_steps = {
+    { bg = '#ff8888' },
+    { bg = '#88ff88' },
+    { bg = '#8888ff' },
+  }
 }
 ```
 
@@ -65,6 +65,6 @@ You can toggle plugin by passing `disable = true` as option to `setup`.
 
 ```lua
 require('fold-ribbon').setup {
-    disable = true,
+  disable = true,
 }
 ```
