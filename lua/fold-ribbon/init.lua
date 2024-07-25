@@ -31,7 +31,8 @@ local function create_line_number_statuscolumn(show_line_number, use_relative_li
   return ''
 end
 
-local saved_statuscolumn = ''
+---@type table<integer, string>
+local saved_statuscolumn_per_window = {}
 
 ---@param window_id integer
 local function update_statuscolumn(window_id)
@@ -194,20 +195,31 @@ function M.setup(options)
   options = vim.tbl_deep_extend('keep', options, default_options)
   M.active_options = options
 
+  local was_disabled_before = not M.is_active
+
+  M.is_active = not options.disable
+
   local open_windows_ids = vim.api.nvim_list_wins()
 
   if options.disable then
     remove_autocommands()
-    vim.o.statuscolumn = saved_statuscolumn
+
+    for _, window_id in pairs(open_windows_ids) do
+      local saved_statuscolumn = saved_statuscolumn_per_window[window_id] or ''
+
+      local buffer_id = vim.api.nvim_win_get_buf(window_id)
+      local file_path = vim.api.nvim_buf_get_name(buffer_id)
+
+      if is_valid_window_for_ribbon(window_id, file_path) then
+        vim.api.nvim_set_option_value('statuscolumn', saved_statuscolumn, { win = window_id })
+      end
+    end
+
+    saved_statuscolumn_per_window = {}
 
     return
   end
 
-  if not M.is_active then
-    saved_statuscolumn = vim.o.statuscolumn
-  end
-
-  M.is_active = not options.disable
 
   if options.highlight_steps then
     if type(options.highlight_steps) == 'table' then
@@ -226,6 +238,10 @@ function M.setup(options)
     local file_path = vim.api.nvim_buf_get_name(buffer_id)
 
     if is_valid_window_for_ribbon(window_id, file_path) then
+      if was_disabled_before then
+        saved_statuscolumn_per_window[window_id] = vim.api.nvim_get_option_value('statuscolumn', { win = window_id })
+      end
+
       update_statuscolumn(window_id)
     end
   end
