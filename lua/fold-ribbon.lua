@@ -53,7 +53,10 @@ local function register_autocommands()
     end,
   })
 
-  vim.api.nvim_create_autocmd('WinEnter', {
+  vim.api.nvim_create_autocmd({
+    'WinEnter',
+    'BufEnter',
+  }, {
     group = group_id,
     callback = function()
       if not is_window_floating(0) then
