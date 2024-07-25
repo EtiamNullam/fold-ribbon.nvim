@@ -4,7 +4,74 @@ M.version = '0.4.0'
 
 M.is_active = false
 
+local fg = {
+  bright = '#ffffff',
+  dark = '#000000',
+}
+
 local default_options = {
+  highlight_steps = {
+    {
+      fg = fg.dark,
+      bg = '#eeeeee',
+    },
+    {
+      fg = fg.dark,
+      bg = '#dddddd',
+    },
+    {
+      fg = fg.dark,
+      bg = '#cccccc',
+    },
+    {
+      fg = fg.dark,
+      bg = '#bbbbbb',
+    },
+    {
+      fg = fg.dark,
+      bg = '#aaaaaa',
+    },
+    {
+      fg = fg.bright,
+      bg = '#999999',
+    },
+    {
+      fg = fg.bright,
+      bg = '#888888',
+    },
+    {
+      fg = fg.bright,
+      bg = '#777777',
+    },
+    {
+      fg = fg.bright,
+      bg = '#666666',
+    },
+    {
+      fg = fg.bright,
+      bg = '#555555',
+    },
+    {
+      fg = fg.bright,
+      bg = '#444444',
+    },
+    {
+      fg = fg.bright,
+      bg = '#333333',
+    },
+    {
+      fg = fg.bright,
+      bg = '#222222',
+    },
+    {
+      fg = fg.bright,
+      bg = '#111111',
+    },
+    {
+      fg = fg.bright,
+      bg = '#000000',
+    },
+  },
   align_line_number_right = true,
   disable = false,
   excluded_filetypes = {
@@ -145,74 +212,6 @@ local function remove_autocommands()
   vim.api.nvim_clear_autocmds { group = autocommand_group }
 end
 
-local fg = {
-  bright = '#ffffff',
-  dark = '#000000',
-}
-
-local highlight_steps = {
-  {
-    fg = fg.dark,
-    bg = '#eeeeee',
-  },
-  {
-    fg = fg.dark,
-    bg = '#dddddd',
-  },
-  {
-    fg = fg.dark,
-    bg = '#cccccc',
-  },
-  {
-    fg = fg.dark,
-    bg = '#bbbbbb',
-  },
-  {
-    fg = fg.dark,
-    bg = '#aaaaaa',
-  },
-  {
-    fg = fg.bright,
-    bg = '#999999',
-  },
-  {
-    fg = fg.bright,
-    bg = '#888888',
-  },
-  {
-    fg = fg.bright,
-    bg = '#777777',
-  },
-  {
-    fg = fg.bright,
-    bg = '#666666',
-  },
-  {
-    fg = fg.bright,
-    bg = '#555555',
-  },
-  {
-    fg = fg.bright,
-    bg = '#444444',
-  },
-  {
-    fg = fg.bright,
-    bg = '#333333',
-  },
-  {
-    fg = fg.bright,
-    bg = '#222222',
-  },
-  {
-    fg = fg.bright,
-    bg = '#111111',
-  },
-  {
-    fg = fg.bright,
-    bg = '#000000',
-  },
-}
-
 function M.setup(options)
   if vim.fn.has('nvim-0.10') == 0 then
     require('fold-ribbon.log').error(
@@ -224,6 +223,17 @@ function M.setup(options)
 
   options = options or {}
   options = vim.tbl_deep_extend('keep', options, default_options)
+
+  if options.highlight_steps then
+    if type(options.highlight_steps) ~= 'table' then
+      require('fold-ribbon.log').warn(
+        'Invalid parameter for "highlight_steps", must be a table of highlights. Using default.'
+      )
+
+      options.highlight_steps = default_options.highlight_steps
+    end
+  end
+
   M.active_options = options
 
   local was_disabled_before = not M.is_active
@@ -250,16 +260,6 @@ function M.setup(options)
     end
 
     return
-  end
-
-  if options.highlight_steps then
-    if type(options.highlight_steps) == 'table' then
-      highlight_steps = options.highlight_steps
-    else
-      require('fold-ribbon.log').warn(
-        'Invalid parameter for "highlight_steps", must be a table of highlights'
-      )
-    end
   end
 
   register_autocommands()
@@ -292,10 +292,10 @@ local function get_highlight(line_number, level)
   end
 
   local step_index = (
-    (level - 1) % #highlight_steps
+    (level - 1) % #M.active_options.highlight_steps
   ) + 1
 
-  return highlight_steps[step_index]
+  return M.active_options.highlight_steps[step_index]
 end
 
 function M.apply_highlight(line_number)
