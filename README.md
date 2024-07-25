@@ -2,9 +2,8 @@
 
 Takes control over `statuscolumn` to indicate fold depth at a glance.
 
-Inspired by Xcode fold indicator.
+Indirectly inspired by Xcode fold indicator.
 
-https://github.com/CodeEditApp/CodeEditTextView/issues/43
 https://github.com/kevinhwang91/nvim-ufo/issues/24
 
 ## Installation
