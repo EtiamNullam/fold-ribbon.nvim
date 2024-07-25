@@ -7,17 +7,19 @@ local function is_window_floating(window_id)
 end
 
 local function create_line_number_statuscolumn(show_line_number, use_relative_line_numbers)
-  return (
-    (show_line_number or use_relative_line_numbers)
-      and (
-        show_line_number and use_relative_line_numbers
-          and '%{v:virtnum > 0 ? "" : line(".") == v:lnum ? v:lnum : v:relnum}'
-          or show_line_number
-            and '%{v:virtnum > 0 ? "" : v:lnum}'
-            or '%{v:virtnum > 0 ? "" : v:relnum}'
-      )
-      or ''
-  )
+  if show_line_number and use_relative_line_numbers then
+    return '%{v:virtnum > 0 ? "" : line(".") == v:lnum ? v:lnum : v:relnum}'
+  end
+
+  if show_line_number then
+    return '%{v:virtnum > 0 ? "" : v:lnum}'
+  end
+
+  if use_relative_line_numbers then
+    return '%{v:virtnum > 0 ? "" : v:relnum}'
+  end
+
+  return ''
 end
 
 local function update_statuscolumn()
