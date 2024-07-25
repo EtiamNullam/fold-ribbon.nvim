@@ -87,6 +87,13 @@ local function is_valid_window_for_ribbon(window_id, file_path)
   return true
 end
 
+---@param window_id integer
+local function restore_statuscolumn(window_id)
+  local saved_statuscolumn = saved_statuscolumn_per_window[window_id] or ''
+
+  vim.api.nvim_set_option_value('statuscolumn', saved_statuscolumn, { win = window_id })
+end
+
 local function register_autocommands()
   local group_id = vim.api.nvim_create_augroup(
     autocommand_group,
@@ -117,6 +124,8 @@ local function register_autocommands()
 
       if is_valid_window_for_ribbon(window_id, event.file) then
         update_statuscolumn(window_id)
+      else
+        restore_statuscolumn(window_id)
       end
     end,
   })
@@ -216,22 +225,22 @@ function M.setup(options)
   if options.disable then
     remove_autocommands()
 
-    for _, window_id in pairs(open_windows_ids) do
-      local saved_statuscolumn = saved_statuscolumn_per_window[window_id] or ''
+    if not was_disabled_before then
+      for _, window_id in pairs(open_windows_ids) do
 
-      local buffer_id = vim.api.nvim_win_get_buf(window_id)
-      local file_path = vim.api.nvim_buf_get_name(buffer_id)
+        local buffer_id = vim.api.nvim_win_get_buf(window_id)
+        local file_path = vim.api.nvim_buf_get_name(buffer_id)
 
-      if is_valid_window_for_ribbon(window_id, file_path) then
-        vim.api.nvim_set_option_value('statuscolumn', saved_statuscolumn, { win = window_id })
+        if is_valid_window_for_ribbon(window_id, file_path) then
+          restore_statuscolumn(window_id)
+        end
       end
-    end
 
-    saved_statuscolumn_per_window = {}
+      saved_statuscolumn_per_window = {}
+    end
 
     return
   end
-
 
   if options.highlight_steps then
     if type(options.highlight_steps) == 'table' then
