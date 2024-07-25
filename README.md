@@ -1,4 +1,12 @@
-# fold-ribbon.nvim
+<h1>
+  fold-ribbon.nvim
+  <a href="https://github.com/EtiamNullam/fold-ribbon.nvim/tags" alt="Latest SemVer tag">
+    <img src="https://img.shields.io/github/v/tag/EtiamNullam/fold-ribbon.nvim" />
+  </a>
+  <a href="LICENSE" alt="License">
+    <img src="https://img.shields.io/github/license/EtiamNullam/fold-ribbon.nvim" />
+  </a>
+</h2>
 
 Takes control over `statuscolumn` to indicate fold depth at a glance.
 
