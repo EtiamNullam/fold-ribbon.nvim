@@ -4,8 +4,8 @@ M.version = '0.4.0'
 
 M.is_active = false
 
-local excluded_filetypes_regexes = {}
-local excluded_paths_regexes = {}
+local excluded_filetype_regexes = {}
+local excluded_path_regexes = {}
 
 local fg = {
   bright = '#ffffff',
@@ -155,13 +155,13 @@ local function is_valid_window_for_ribbon(window_id, file_path)
     return false
   end
 
-  for _, regex in pairs(excluded_filetypes_regexes) do
+  for _, regex in pairs(excluded_filetype_regexes) do
     if regex:match_str(vim.o.filetype) then
       return false
     end
   end
 
-  for _, regex in pairs(excluded_paths_regexes) do
+  for _, regex in pairs(excluded_path_regexes) do
     if regex:match_str(file_path) then
       return false
     end
@@ -296,8 +296,8 @@ function M.setup(options)
 
   register_autocommands()
 
-  excluded_filetypes_regexes = compile_regexes(options.excluded_filetype_patterns, true)
-  excluded_paths_regexes = compile_regexes(options.excluded_path_patterns, true)
+  excluded_filetype_regexes = compile_regexes(options.excluded_filetype_patterns, true)
+  excluded_path_regexes = compile_regexes(options.excluded_path_patterns, true)
 
   for _, window_id in pairs(open_windows_ids) do
     local buffer_id = vim.api.nvim_win_get_buf(window_id)
