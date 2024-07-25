@@ -77,8 +77,8 @@ local function register_autocommands()
   })
 
   vim.api.nvim_create_autocmd({
-    'WinEnter',
-    'BufEnter',
+    'WinNew',
+    'BufWinEnter',
   }, {
     group = group_id,
     callback = function()
