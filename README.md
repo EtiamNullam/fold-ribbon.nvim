@@ -45,3 +45,17 @@ local ribbon = require('fold-ribbon').get_ribbon()
 
 vim.o.statuscolumn = '%l ' .. ribbon
 ```
+
+### Use custom highlight colors
+
+You can define your own colors at each fold level. If there are more fold levels than amount of defined steps they will loop. `highlight_steps` has to be a table of highlights just as you would use in `vim.api.nvim_set_hl`.
+
+```lua
+require('fold-ribbon').setup {
+    highlight_steps = {
+        { bg = '#ff8888' },
+        { bg = '#88ff88' },
+        { bg = '#8888ff' },
+    }
+}
+```
