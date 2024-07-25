@@ -9,6 +9,14 @@ local fg = {
   dark = '#000000',
 }
 
+---@class FoldRibbon.SetupOptions
+  ---@field highlight_steps vim.api.keyset.highlight[]
+  ---@field align_line_number_right boolean
+  ---@field disable boolean
+  ---@field excluded_filetypes string[]
+  ---@field excluded_paths string[]
+
+---@type FoldRibbon.SetupOptions
 local default_options = {
   highlight_steps = {
     {
@@ -214,6 +222,14 @@ local function remove_autocommands()
   vim.api.nvim_clear_autocmds { group = autocommand_group }
 end
 
+---@class FoldRibbon.SetupOptions.Overrides
+  ---@field highlight_steps? vim.api.keyset.highlight[]
+  ---@field align_line_number_right? boolean
+  ---@field disable? boolean
+  ---@field excluded_filetypes? string[]
+  ---@field excluded_paths? string[]
+
+---@param options FoldRibbon.SetupOptions.Overrides
 function M.setup(options)
   if vim.fn.has('nvim-0.10') == 0 then
     require('fold-ribbon.log').error(
@@ -280,6 +296,7 @@ function M.setup(options)
   end
 end
 
+---@return vim.api.keyset.highlight
 local function get_highlight(line_number, level)
   local has_no_fold = level == 0
 
@@ -300,6 +317,8 @@ local function get_highlight(line_number, level)
   return M.active_options.highlight_steps[step_index]
 end
 
+---@param line_number integer
+---@return string
 function M.apply_highlight(line_number)
   local current_line_level = vim.fn.foldlevel(line_number)
 
@@ -308,6 +327,10 @@ function M.apply_highlight(line_number)
   return ' '
 end
 
+---@class FoldRibbon.RibbonOptions
+  ---@field close boolean
+
+---@param options? FoldRibbon.RibbonOptions
 ---@return string
 function M.get_ribbon(options)
   options = options or {}
