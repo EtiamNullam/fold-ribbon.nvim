@@ -167,7 +167,7 @@ function M.setup(options)
       highlight_steps = options.highlight_steps
     else
       require('fold-ribbon.log').warn(
-        'Invalid parameter for "step_highlights", must be a table of highlights'
+        'Invalid parameter for "highlight_steps", must be a table of highlights'
       )
     end
   end
