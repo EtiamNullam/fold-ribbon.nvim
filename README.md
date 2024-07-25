@@ -6,7 +6,7 @@
   <a href="LICENSE" alt="License">
     <img src="https://img.shields.io/github/license/EtiamNullam/fold-ribbon.nvim" />
   </a>
-</h2>
+</h1>
 
 This plugin for [neovim](https://neovim.io) allows you to see fold depth at a glance.
 
