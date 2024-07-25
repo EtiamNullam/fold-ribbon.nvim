@@ -166,13 +166,11 @@ local function get_highlight(line_number, level)
     end
   end
 
-  local highlight = highlight_steps[
-    (
-      (level - 1) % #highlight_steps
-    ) + 1
-  ]
+  local step_index = (
+    (level - 1) % #highlight_steps
+  ) + 1
 
-  return highlight
+  return highlight_steps[step_index]
 end
 
 function M.apply_highlight(line_number)
