@@ -5,7 +5,7 @@ M.version = '0.3.0'
 M.is_active = false
 
 local function is_window_floating(window_id)
-  return vim.api.nvim_win_get_config(window_id).relative ~= ""
+  return vim.api.nvim_win_get_config(window_id).relative ~= ''
 end
 
 local function create_line_number_statuscolumn(show_line_number, use_relative_line_numbers)
@@ -210,7 +210,7 @@ end
 ---@return string
 function M.get_ribbon()
   return '%#FoldColumnDynamic#'
-    .. "%{v:lua.require('fold-ribbon').apply_highlight(v:lnum)}"
+    .. '%{v:lua.require("fold-ribbon").apply_highlight(v:lnum)}'
     .. '%##'
 end
 
