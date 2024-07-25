@@ -7,6 +7,10 @@ M.is_active = false
 local default_options = {
   align_line_number_right = true,
   disable = false,
+  excluded_filetypes = {
+    'startify',
+    'help',
+  },
 }
 
 M.active_options = default_options
@@ -70,6 +74,14 @@ local autocommand_group = 'FoldRibbon'
 local function is_valid_window_for_ribbon(window_id, file_path)
   if is_window_floating(window_id) then
     return false
+  end
+
+  for _, excluded_filetype in pairs(M.active_options.excluded_filetypes) do
+    local is_excluded = excluded_filetype == vim.o.filetype
+
+    if is_excluded then
+      return false
+    end
   end
 
   return true
