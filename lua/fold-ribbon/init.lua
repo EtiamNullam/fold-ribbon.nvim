@@ -197,13 +197,15 @@ local function register_autocommands()
   }, {
     group = group_id,
     callback = function(event)
-      local window_id = 0
+      vim.schedule(function()
+        local window_id = 0
 
-      if is_valid_window_for_ribbon(window_id, event.file) then
-        update_statuscolumn(window_id)
-      else
-        restore_statuscolumn(window_id)
-      end
+        if is_valid_window_for_ribbon(window_id, event.file) then
+          update_statuscolumn(window_id)
+        else
+          restore_statuscolumn(window_id)
+        end
+      end)
     end,
   })
 end
