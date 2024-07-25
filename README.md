@@ -59,9 +59,89 @@ local ribbon = require('fold-ribbon').get_ribbon()
 vim.o.statuscolumn = '%l ' .. ribbon
 ```
 
-### Use custom highlight colors
+### Setup options
 
-You can define your own colors at each fold level. If there are more fold levels than amount of defined steps they will loop. `highlight_steps` has to be a table of highlights just as you would use in `vim.api.nvim_set_hl`.
+Here are all available configuration options with their defaults:
+
+```lua
+require('fold-ribbon').setup {
+  disable = false, -- Toggle to disable the plugin after it was started.
+  align_line_number_right = true, -- Align line numbers to the right, as it is by default.
+  excluded_filetype_patterns = { -- List of filetype regex patterns where plugin will not be displayed.
+    'startify',
+    'help',
+  },
+  excluded_path_patterns = {}, -- List of path regex patterns where plugin will not be displayed.
+  highlight_steps = { -- Defines colors at each fold level.
+    -- If there are more fold levels than steps defined they will loop.
+    -- It has to be a table of highlights just as you would use in `vim.api.nvim_set_hl`.
+    {
+      fg = fg.dark,
+      bg = '#eeeeee',
+    },
+    {
+      fg = fg.dark,
+      bg = '#dddddd',
+    },
+    {
+      fg = fg.dark,
+      bg = '#cccccc',
+    },
+    {
+      fg = fg.dark,
+      bg = '#bbbbbb',
+    },
+    {
+      fg = fg.dark,
+      bg = '#aaaaaa',
+    },
+    {
+      fg = fg.bright,
+      bg = '#999999',
+    },
+    {
+      fg = fg.bright,
+      bg = '#888888',
+    },
+    {
+      fg = fg.bright,
+      bg = '#777777',
+    },
+    {
+      fg = fg.bright,
+      bg = '#666666',
+    },
+    {
+      fg = fg.bright,
+      bg = '#555555',
+    },
+    {
+      fg = fg.bright,
+      bg = '#444444',
+    },
+    {
+      fg = fg.bright,
+      bg = '#333333',
+    },
+    {
+      fg = fg.bright,
+      bg = '#222222',
+    },
+    {
+      fg = fg.bright,
+      bg = '#111111',
+    },
+    {
+      fg = fg.bright,
+      bg = '#000000',
+    },
+  },
+}
+```
+
+#### Use custom highlight colors
+
+Simple example how to override `highlight_steps`:
 
 ```lua
 require('fold-ribbon').setup {
@@ -70,15 +150,5 @@ require('fold-ribbon').setup {
     { bg = '#88ff88' },
     { bg = '#8888ff' },
   }
-}
-```
-
-### Disable
-
-You can toggle plugin by passing `disable = true` as option to `setup`.
-
-```lua
-require('fold-ribbon').setup {
-  disable = true,
 }
 ```
