@@ -2,6 +2,8 @@ local M = {}
 
 M.version = '0.2.0'
 
+M.is_active = false
+
 local function is_window_floating(window_id)
   return vim.api.nvim_win_get_config(window_id).relative ~= ""
 end
@@ -22,6 +24,8 @@ local function create_line_number_statuscolumn(show_line_number, use_relative_li
   return ''
 end
 
+local saved_statuscolumn = ''
+
 local function update_statuscolumn()
   vim.o.foldcolumn = '0'
   vim.o.statuscolumn = '%s'
@@ -31,9 +35,11 @@ local function update_statuscolumn()
     .. ' '
 end
 
+local autocommand_group = 'FoldRibbon'
+
 local function register_autocommands()
   local group_id = vim.api.nvim_create_augroup(
-    'FoldRibbon',
+    autocommand_group,
     { clear = true }
   )
 
@@ -55,6 +61,10 @@ local function register_autocommands()
       end
     end,
   })
+end
+
+local function remove_autocommands()
+  vim.api.nvim_clear_autocmds { group = autocommand_group }
 end
 
 local fg = {
@@ -135,6 +145,19 @@ function M.setup(options)
   end
 
   options = options or {}
+
+  if options.disable then
+    remove_autocommands()
+    vim.o.statuscolumn = saved_statuscolumn
+
+    return
+  end
+
+  if not M.is_active then
+    saved_statuscolumn = vim.o.statuscolumn
+  end
+
+  M.is_active = not options.disable
 
   if options.highlight_steps then
     if type(options.highlight_steps) == 'table' then
