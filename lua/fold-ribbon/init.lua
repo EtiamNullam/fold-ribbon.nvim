@@ -11,6 +11,7 @@ local default_options = {
     'startify',
     'help',
   },
+  excluded_paths = {},
 }
 
 M.active_options = default_options
@@ -78,6 +79,15 @@ local function is_valid_window_for_ribbon(window_id, file_path)
 
   for _, excluded_filetype in pairs(M.active_options.excluded_filetypes) do
     local is_excluded = excluded_filetype == vim.o.filetype
+
+
+    if is_excluded then
+      return false
+    end
+  end
+
+  for _, excluded_path in pairs(M.active_options.excluded_paths) do
+    local is_excluded = file_path == excluded_path
 
     if is_excluded then
       return false
