@@ -78,63 +78,63 @@ require('fold-ribbon').setup {
     -- If there are more fold levels than steps defined they will loop.
     -- It has to be a table of highlights just as you would use in `vim.api.nvim_set_hl`.
     {
-      fg = fg.dark,
+      fg = '#000000',
       bg = '#eeeeee',
     },
     {
-      fg = fg.dark,
+      fg = '#000000',
       bg = '#dddddd',
     },
     {
-      fg = fg.dark,
+      fg = '#000000',
       bg = '#cccccc',
     },
     {
-      fg = fg.dark,
+      fg = '#000000',
       bg = '#bbbbbb',
     },
     {
-      fg = fg.dark,
+      fg = '#000000',
       bg = '#aaaaaa',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#999999',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#888888',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#777777',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#666666',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#555555',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#444444',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#333333',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#222222',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#111111',
     },
     {
-      fg = fg.bright,
+      fg = '#ffffff',
       bg = '#000000',
     },
   },
