@@ -309,10 +309,18 @@ function M.apply_highlight(line_number)
 end
 
 ---@return string
-function M.get_ribbon()
-  return '%#FoldColumnDynamic#'
+function M.get_ribbon(options)
+  options = options or {}
+  options = vim.tbl_deep_extend('keep', options, { close = true })
+
+  local ribbon = '%#FoldColumnDynamic#'
     .. '%{v:lua.require("fold-ribbon").apply_highlight(v:lnum)}'
-    .. '%##'
+
+  if options.close then
+    ribbon = ribbon .. '%##'
+  end
+
+  return ribbon
 end
 
 return M
