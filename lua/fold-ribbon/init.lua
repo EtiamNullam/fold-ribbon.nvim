@@ -139,9 +139,9 @@ local highlight_steps = {
 }
 
 function M.setup(options)
-  if vim.fn.has('nvim-0.9') == 0 then
+  if vim.fn.has('nvim-0.10') == 0 then
     require('fold-ribbon.log').error(
-      'Configuration of "statuscolumn" requires latest version of neovim nightly (>= 0.9)'
+      'Configuration of "statuscolumn" requires neovim version of at least 0.10'
     )
 
     return

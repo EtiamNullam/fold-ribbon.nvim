@@ -14,6 +14,10 @@ Indirectly inspired by Xcode fold indicator.
 
 https://github.com/kevinhwang91/nvim-ufo/issues/24
 
+## Requirements
+
+- `neovim` >= `0.10`
+
 ## Installation
 
 `lazy.nvim`:
