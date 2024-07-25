@@ -8,7 +8,9 @@
   </a>
 </h2>
 
-Takes control over `statuscolumn` to indicate fold depth at a glance.
+This plugin for [neovim](https://neovim.io) allows you to see fold depth at a glance.
+
+You can [let `fold-ribbon` take control over `statuscolumn`](#give-full-control-over-statuscolumn) or [use the API if you already use custom `statuscolumn`](#get-component-for-use-in-statuscolumn) (not to be confused with `statusline`).
 
 Indirectly inspired by Xcode fold indicator.
 
