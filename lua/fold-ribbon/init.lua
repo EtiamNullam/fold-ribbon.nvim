@@ -13,16 +13,16 @@ local fg = {
 }
 
 ---@class FoldRibbon.SetupOptions
-  ---@field align_line_number_right boolean
   ---@field disable boolean
+  ---@field align_line_number_right boolean
   ---@field excluded_filetype_patterns string[]
   ---@field excluded_path_patterns string[]
   ---@field highlight_steps vim.api.keyset.highlight[]
 
 ---@type FoldRibbon.SetupOptions
 local default_options = {
-  align_line_number_right = true,
   disable = false,
+  align_line_number_right = true,
   excluded_filetype_patterns = {
     'startify',
     'help',
@@ -238,8 +238,8 @@ local function compile_regexes(patterns, match_precisely)
 end
 
 ---@class FoldRibbon.SetupOptions.Overrides
-  ---@field align_line_number_right? boolean
   ---@field disable? boolean
+  ---@field align_line_number_right? boolean
   ---@field excluded_filetype_patterns? string[]
   ---@field excluded_path_patterns? string[]
   ---@field highlight_steps? vim.api.keyset.highlight[]
