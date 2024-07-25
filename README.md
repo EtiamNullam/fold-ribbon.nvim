@@ -59,3 +59,13 @@ require('fold-ribbon').setup {
     }
 }
 ```
+
+### Disable
+
+You can toggle plugin by passing `disable = true` as option to `setup`.
+
+```lua
+require('fold-ribbon').setup {
+    disable = true,
+}
+```
