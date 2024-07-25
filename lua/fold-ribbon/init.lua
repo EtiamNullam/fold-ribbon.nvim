@@ -1,6 +1,6 @@
 local M = {}
 
-M.version = '0.2.0'
+M.version = '0.3.0'
 
 M.is_active = false
 
