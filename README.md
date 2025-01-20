@@ -10,6 +10,8 @@
 
 This plugin for [neovim](https://neovim.io) allows you to see fold depth at a glance.
 
+![image](https://github.com/user-attachments/assets/26ae8233-e1f7-48ec-9fca-1aa754e2ff64)
+
 You can [let `fold-ribbon` take control over `statuscolumn`](#give-full-control-over-statuscolumn) or [use the API if you already use custom `statuscolumn`](#get-component-for-use-in-statuscolumn) (not to be confused with `statusline`).
 
 Indirectly inspired by Xcode fold indicator.
